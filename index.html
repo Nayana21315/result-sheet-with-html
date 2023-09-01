@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>Result Sheet</title>
+</head>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                
+            }
+    
+            .container {
+                max-width: 800px;
+                margin: 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+    
+            h1, h2{
+              text-align: center;
+                margin: 0;
+                padding: 10px;
+                flex-grow: 1; /* Allow h1 and h2 to grow and fill available space */
+            }
+            h3{
+                text-align: center;
+                background-color: #abdd6a;
+            }
+    
+            .icon-container {
+                /* Additional styling for the icon container */
+                display: flex;
+                align-items:right;
+            }
+    
+            .icon-container img {
+                max-width: 250px; /* Adjust the width of the icon as needed */
+                height: auto;
+                margin-left: 10px; /* Add margin to separate the icon from text */
+            }
+    
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            
+   
+    
+    
+    .subject-input {
+        width: 100%; 
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+
+
+    
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            form {
+                margin-top: 20px;
+            }
+    
+            input[type="text"], input[type="number"] {
+                width: 100%;
+                padding: 5px;
+                margin-bottom: 10px;
+            }
+    
+            .center-button {
+                text-align: center;
+            }
+    
+            button[type="button"] {
+                padding: 10px 20px;
+                background-color:black;
+                color:#ddd;
+                border: none;
+                cursor: pointer;
+            }
+    
+            button[type="button"]:hover{
+                background-color: #0a0a0a; /* Darker green color on hover */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <h1>Visvesvaraya Technology University</h1>
+                <h2>"Jnana Sangama" Belagavi 590018, Karnataka, India</h2>
+            </div>
+            <div class="icon-container">
+                <img src="https://www.sirmvit.edu/wp-content/uploads/2019/01/VTU-Logo-120x110.png" alt="VTU Logo">
+            </div>
+        </div>
+        <form>
+          
+            <h3>Student Information</h3>
+            <label for="studentName">Name:</label>
+            <input type="text" id="studentName" name="studentName"><br>
+            
+            <label for="usn">USN:</label>
+            <input type="text" id="usn" name="usn"><br>
+            
+            <label for="semester">Semester:</label>
+            <input type="number" id="semester" name="semester"><br>
+            
+            <h3>Subject-wise Results</h3>
+            <table>
+                <tr>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Marks Obtained</th>
+                    <th>Maximum Marks</th>
+                </tr>
+               <!-- Inside the table -->
+<tr>
+    <td><input type="text" name="subjectCode[]" class="subject-input subject-code"></td>
+    <td><input type="text" name="subjectName[]" class="subject-input subject-name"></td>
+    <td><input type="number" name="marksObtained[]" class="subject-input marks-obtained"></td>
+    <td><input type="number" name="maxMarks[]" class="subject-input max-marks" value="100"></td>
+</tr>
+<!-- Add more subjects as needed -->
+
+                <!-- Add more subjects as needed -->
+            </table>
+            
+            <button type="button" onclick="addSubjectRow()">Add Subject</button>
+            
+            <h3>Overall Result</h3>
+            <p><strong>Total Marks Obtained:</strong> <span id="totalMarksObtained">0</span></p>
+            <p><strong>Total Maximum Marks:</strong> <span id="totalMaxMarks">0</span></p>
+            <p><strong>Overall Percentage:</strong> <span id="overallPercentage">0%</span></p>
+            
+            <h3>Remarks</h3>
+            <p><strong>Remarks:</strong> <span id="remarks"></span></p>
+            
+            <button type="button" onclick="calculateResult()">Calculate Result</button>
+        </form>
+    </div>
+    <script>
+        function addSubjectRow() {
+            const table = document.querySelector('table');
+            const newRow = table.insertRow(-1);
+            newRow.innerHTML = `<td><input type="text" name="subjectCode[]" class="subject-code"></td>
+                                <td><input type="text" name="subjectName[]" class="subject-name"></td>
+                                <td><input type="number" name="marksObtained[]" class="marks-obtained"></td>
+                                <td><input type="number" name="maxMarks[]" class="max-marks" value="100"></td>`;
+        }
+
+        function calculateResult() {
+            const marksObtainedInputs = document.querySelectorAll('.marks-obtained');
+            const maxMarksInputs = document.querySelectorAll('.max-marks');
+
+            let totalMarksObtained = 0;
+            let totalMaxMarks = 0;
+
+            marksObtainedInputs.forEach((input, index) => {
+                const marks = parseInt(input.value);
+                const maxMarks = parseInt(maxMarksInputs[index].value);
+
+                if (!isNaN(marks) && !isNaN(maxMarks)) {
+                    totalMarksObtained += marks;
+                    totalMaxMarks += maxMarks;
+                }
+            });
+
+            const overallPercentage = totalMaxMarks > 0 ? (totalMarksObtained / totalMaxMarks) * 100 : 0;
+
+            document.getElementById('totalMarksObtained').textContent = totalMarksObtained;
+            document.getElementById('totalMaxMarks').textContent = totalMaxMarks;
+            document.getElementById('overallPercentage').textContent = overallPercentage.toFixed(2) + "%";
+
+            const remarks = overallPercentage >= 40 ? "Pass" : "Fail";
+            document.getElementById('remarks').textContent = remarks;
+        }
+    </script>
+     
+<div class="center-button">
+<button type="button" onclick="printResultSheet()">Print Result Sheet</button>
+</div>
+
+<script>
+    
+
+    function printResultSheet() {
+        // Hide the "Print Result Sheet" button before printing.
+        const printButton = document.querySelector('button[onclick="printResultSheet()"]');
+        printButton.style.display = 'none';
+
+        // Trigger the browser's print dialog.
+        window.print();
+
+        // Show the "Print Result Sheet" button again after printing (optional).
+        printButton.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
